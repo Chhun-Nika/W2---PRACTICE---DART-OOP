@@ -5,37 +5,32 @@ import 'product.dart';
 enum DeliveryType {delivery, pickup}
 
 class Order {
-  final Map<int, Product> _availableProducts;
   final Map<int, OrderItem> _items = {};
   final DeliveryType _deliveryType;
   final Address? _address;
 
+  Order.pickup() 
+      : _deliveryType = DeliveryType.pickup,
+        _address = null;
 
-  Order.pickup({required Map<int, Product> availableProducts}) : 
-    _availableProducts = availableProducts,
-    _deliveryType = DeliveryType.pickup,
-    _address = null;
+  Order.delivery({required Address address})
+      : _deliveryType = DeliveryType.delivery,
+        _address = address;
 
-  Order.delivery({required Map<int, Product> availableProducts, required Address address}) :
-    _availableProducts = availableProducts,
-    _deliveryType = DeliveryType.delivery,
-    _address = address;
-
-  void addOrderItem(int productId, int orderQuantity) {
-    var existingProduct = _availableProducts[productId];
-    // Check if product exists.
-    if (productId <= 0 || existingProduct == null) {
-      throw Exception("Product with ID $productId does not exist.");
+  /// Adds a product to the order
+  void addOrderItem(Product product, int orderQuantity) {
+    if (orderQuantity <= 0) {
+      throw Exception("Order quantity must be greater than 0.");
     }
-    // Check if product already in order
-    var existingItem = _items[productId];
+
+    var existingItem = _items[product.productId];
     if (existingItem != null) {
       existingItem.addQuantity(orderQuantity);
-      existingItem.product.deductStock(orderQuantity);
+      product.deductStock(orderQuantity);
     } else {
-      // Add new order item into order
-      existingProduct.deductStock(orderQuantity);
-      _items[productId] = OrderItem(product: existingProduct, orderQuantity: orderQuantity);
+      product.deductStock(orderQuantity);
+      _items[product.productId] =
+          OrderItem(product: product, orderQuantity: orderQuantity);
     }
   }
 
