@@ -1,0 +1,6 @@
+# Dart/Pub related
+.dart_tool/
+pubspec.lock
+
+# IDE / editor files
+.vscode/
