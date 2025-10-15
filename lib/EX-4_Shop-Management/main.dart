@@ -9,8 +9,8 @@ void main () {
     }
   var address = Address(street: "123 Riverside Blvd", city: "Phnom Penh", zipCode: "123456");
   Order order = Order.delivery(availableProducts: availableProducts, address: address);
-  order.addOrderItem(10, 4);
-  order.addOrderItem(1, 0);
+  order.addOrderItem(1, 4);
+  order.addOrderItem(1, 2);
 
   order.printReceipt();
 
