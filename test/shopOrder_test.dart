@@ -28,15 +28,17 @@ void main () {
   test('Adding non-existing product ID to order (delivery)', () {
     Map<int, Product> products = cloneAvailableProducts();
     var address = Address(street: "123 Riverside Blvd", city: "Phnom Penh", zipCode: "CHICK-1234");
-    Order order = Order.delivery(availableProducts: products, address: address);
-    expect(() => order.addOrderItem(10, 4), throwsA(isA<Exception>()));
+    Order order = Order.delivery(address: address);
+    var p1 = products[10]!;
+    expect(() => order.addOrderItem(p1, 4), throwsA(isA<Exception>()));
   });
 
   test('Adding existing product ID to order and check the product deduction (Delivery type)', () {
     Map<int, Product> products = cloneAvailableProducts();
     var address = Address(street: "123 Riverside Blvd", city: "Phnom Penh", zipCode: "CHICK-1234");
-    Order order = Order.delivery(availableProducts: products, address: address);
-    order.addOrderItem(1, 4);
+    Order order = Order.delivery(address: address);
+    var p1 = products[1]!;
+    order.addOrderItem(p1, 4);
     var item = order.items[1]!;
     expect(item.orderQuantity, equals(4));
     expect(item.subTotal, equals(8));
@@ -47,9 +49,10 @@ void main () {
   test('Adding existing orderItem', () {
     Map<int, Product> products = cloneAvailableProducts();
     var address = Address(street: "123 Riverside Blvd", city: "Phnom Penh", zipCode: "CHICK-1234");
-    Order order = Order.delivery(availableProducts: products, address: address);
-    order.addOrderItem(1, 4);
-    order.addOrderItem(1, 1);
+    Order order = Order.delivery(address: address);
+    var p1 = products[1]!;
+    order.addOrderItem(p1, 4);
+    order.addOrderItem(p1, 1);
     var item = order.items[1]!;
     expect(item.subTotal, equals(10));
     expect(products[1]!.quantity, equals(5));
@@ -60,9 +63,12 @@ void main () {
 
   test('Adding multiple products', () {
     Map<int, Product> products = cloneAvailableProducts();
-    Order order = Order.pickup(availableProducts: products);
-    order.addOrderItem(1, 1);
-    order.addOrderItem(2, 1);
+    Order order = Order.pickup();
+    var p1 = products[1]!;
+    var p2 = products[1]!;
+
+    order.addOrderItem(p1, 1);
+    order.addOrderItem(p2, 1);
     // When accessing the value of map by key it will return as nullable
     var item1 = order.items[1]!;
     var item2 = order.items[2]!;
@@ -82,14 +88,17 @@ void main () {
 
   test('Adding product with 0 quantity', () {
     Map<int, Product> products = cloneAvailableProducts();
-    Order order = Order.pickup(availableProducts: products);
-    expect(() => order.addOrderItem(1, 0), throwsA(isA<Exception>()));
+    Order order = Order.pickup();
+    var p1 = products[1]!;
+    expect(() => order.addOrderItem(p1, 0), throwsA(isA<Exception>()));
   });
 
   test('Adding product with negative number', () {
     Map<int, Product> products = cloneAvailableProducts();
-    Order order = Order.pickup(availableProducts: products);
-    expect(() => order.addOrderItem(1, -1), throwsA(isA<Exception>()));
+    Order order = Order.pickup();
+    var p1 = products[1]!;
+
+    expect(() => order.addOrderItem(p1, -1), throwsA(isA<Exception>()));
   });
 
 
